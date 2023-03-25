@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h4>{{ user.username }}</h4>
+        </div>
+        <div class="card-body">
+          <img src="{% url
+          "https://pbs.twimg.com/profile_images/745436108624912384/eMEJYfIE_400x400.jpg"
+          %}" alt="{{ user.username }}" class="img-thumbnail" />
+          <p>Email: {{ user.email }}</p>
+        </div>
+        <div class="card-footer">
+          <a href="{% url 'home' %}" class="btn btn-primary">Change Password</a>
+        </div>
+      </div>
+      <br />
+      <p>
+        Try out our Communication System app and never be misunderstood again!
+      </p>
+      <p>With our app, you can:</p>
+      <ul>
+        <li>Send messages with custom emoji reactions</li>
+        <li>Translate messages into any language in real time</li>
+        <li>Set custom notification sounds for each contact</li>
+      </ul>
+      <p>Download it now on the App Store and Google Play!</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

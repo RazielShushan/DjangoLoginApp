@@ -1,10 +1,4 @@
 {% extends 'base.html' %} {% block content %}
-{% comment %} <div class="container">
-  <div class="card">
-    <div class="card-header">
-      <h3 class="mb-0">Signup</h3>
-    </div>
-    <div class="card-body"> {% endcomment %}
       <form method="post" class="form-signin">
         {% csrf_token %}
         <h2 class="form-signin-heading">Sign up</h2>
@@ -17,58 +11,8 @@
         {% endfor %}
         </p>
         {% endfor %}
-        {% comment %}
-        <div class="form-label-group">
-          <input
-            type="text"
-            id="inputUsername"
-            class="form-control"
-            placeholder="Username"
-            required
-            autofocus
-          />
-          <label for="inputUsername">Username</label>
-        </div>
-
-        <div class="form-label-group">
-          <input
-            type="email"
-            id="inputEmail"
-            class="form-control"
-            placeholder="Email address"
-            required
-          />
-          <label for="inputEmail">Email address</label>
-        </div>
-
-        <div class="form-label-group">
-          <input
-            type="password"
-            id="inputPassword"
-            class="form-control"
-            placeholder="Password"
-            required
-          />
-          <label for="inputPassword">Password</label>
-        </div>
-
-        <div class="form-label-group">
-          <input
-            type="password"
-            id="inputConfirmPassword"
-            class="form-control"
-            placeholder="Confirm password"
-            required
-          />
-          <label for="inputConfirmPassword">Confirm password</label>
-        </div>
-        {% endcomment %}
-
         <button class="btn btn-lg btn-primary btn-block mt-4" type="submit">
           Sign up
         </button>
       </form>
-    {% comment %} </div>
-  </div>
-</div> {% endcomment %}
 {% endblock %}

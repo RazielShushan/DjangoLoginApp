@@ -26,8 +26,6 @@ SECRET_KEY = 'django-insecure-!8)7sh84)no#c_rgd26f=_^7@q$horu%b12gn6@3r##-$3cqs%
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -79,8 +77,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Communication_system',
         'USER': 'root',
-        'PASSWORD': 'til96544',
-        'HOST': 'localhost',
+        'PASSWORD': '123456',
+        'HOST': 'ec2-3-21-159-201.us-east-2.compute.amazonaws.com',
         'PORT': '3306',
     }
 }
@@ -89,20 +87,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+AUTH_PASSWORD_VALIDATORS = []
 
 
 # Internationalization
