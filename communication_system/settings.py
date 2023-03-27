@@ -72,16 +72,33 @@ WSGI_APPLICATION = 'communication_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'Communication_system',
+#        'USER': 'root',
+#        'PASSWORD': 'til96544',
+#        'HOST': 'localhost',
+#        'PORT': '3306',
+#    }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Communication_system',
-        'USER': 'root',
+        'USER': 'remote',
         'PASSWORD': '123456',
         'HOST': 'ec2-3-21-159-201.us-east-2.compute.amazonaws.com',
         'PORT': '3306',
     }
 }
+
+# SECURE_SSL_REDIRECT = True
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_HOST = 'localhost'
+# SECURE_HSTS_SECONDS = 31536000  # One year
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
 
 # Password validation
