@@ -1,10 +1,10 @@
 import hmac
 import hashlib
 from django.db import models
-from django.contrib.auth.models import User
+from communication_system.settings import AUTH_USER_MODEL
 
 
-class CustomUser(User):
+""" class CustomUser(User):
     def save(self, *args, **kwargs):
         # Generate a custom salt and HMAC value
         salt = "12"
@@ -19,10 +19,21 @@ class CustomUser(User):
 
         # Call the superclass's save() method to save the user in the database
         super(CustomUser, self).save(*args, **kwargs)
+"""
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        AUTH_USER_MODEL, on_delete=models.CASCADE)
     email = models.EmailField()
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+
+
+"""" class Profile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, parent_link=True)
+    email = models.EmailField()
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    """

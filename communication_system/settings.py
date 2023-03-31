@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import ssl
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,18 +24,35 @@ SECRET_KEY = 'django-insecure-!8)7sh84)no#c_rgd26f=_^7@q$horu%b12gn6@3r##-$3cqs%
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+""" 
+# Enable TLS 1.2
+ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+ssl_context.load_cert_chain('cert.pem', 'key.pem')
+
+# Pass the SSL context object to the runsslserver command
+RUNSERVERPLUS_SERVER_ADDRESS_PORT = 'localhost:8000'
+RUNSERVERPLUS_SERVER_CERT = ssl_context
+"""
+if not DEBUG:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+# Set the SSL certificate and key paths
+
 
 ALLOWED_HOSTS = ['127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'login_system',
+    "sslserver",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'login_system'
+
 ]
 
 MIDDLEWARE = [
@@ -47,8 +64,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+"""
+# Relevant to the non secure version
+AUTHENTICATION_BACKENDS = [
+    'login_system.PlainTextBackend.PlainTextBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+"""
 
 ROOT_URLCONF = 'communication_system.urls'
+
+AUTH_USER_MODEL = 'login_system.Account'
 
 TEMPLATES = [
     {
@@ -72,18 +98,18 @@ WSGI_APPLICATION = 'communication_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': 'Communication_system',
-#        'USER': 'root',
-#        'PASSWORD': 'til96544',
-#        'HOST': 'localhost',
-#        'PORT': '3306',
-#    }
-# }
-
 DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Communication_system',
+        'USER': 'root',
+        'PASSWORD': 'til96544',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
+
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Communication_system',
@@ -93,12 +119,7 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
-# SECURE_SSL_REDIRECT = True
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# SECURE_SSL_HOST = 'localhost'
-# SECURE_HSTS_SECONDS = 31536000  # One year
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+"""
 
 
 # Password validation
