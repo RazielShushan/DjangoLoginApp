@@ -1,8 +1,5 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-import hmac
-import hashlib
-import random
 
 
 class MyAccountManager(BaseUserManager):
@@ -44,8 +41,7 @@ class Account(AbstractUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'username'
     object = MyAccountManager()
 
     def _str_(self):

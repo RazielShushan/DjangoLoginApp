@@ -13,7 +13,7 @@ def logout(request):
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
 
         user = authenticate(request, username=username, password=password)
@@ -57,8 +57,6 @@ def signup(request):
             user = form.save()
             user.refresh_from_db()
             user.save()
-            # raw_password = form.cleaned_data.get('password1')
-            # user = authenticate(username=user.username, password=raw_password)
             login(request, user)
             return redirect('home')
     else:

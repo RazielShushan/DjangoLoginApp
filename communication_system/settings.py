@@ -64,13 +64,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-"""
-# Relevant to the non secure version
 AUTHENTICATION_BACKENDS = [
-    'login_system.PlainTextBackend.PlainTextBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
-"""
 
 ROOT_URLCONF = 'communication_system.urls'
 
