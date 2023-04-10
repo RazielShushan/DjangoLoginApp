@@ -1,24 +1,17 @@
 from django.shortcuts import render, redirect
-
 from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout as lo
-from .forms.SignupForm import SignupForm
-from django.contrib.auth.decorators import login_required
-from .models import Account as User
-
+from ..models import Account as User
 import pytz
 from datetime import datetime, timedelta
-from .models.LoginAttempt import LoginAttempt
-from django.core.exceptions import ValidationError
+from ..models.LoginAttempt import LoginAttempt
+import yaml
 
+# Load the password policy configuration from a YAML file
+with open(r'C:\Users\Raziel personal\django-projects\communication_system\communication_system\login_system\password_policy.yml', 'r') as f:
+    config = yaml.safe_load(f)
 
-MAX_LOGIN_ATTEMPTS = 3
-BLOCK_DURATION = 5  # in minutes
-
-
-def logout(request):
-    lo(request)
-    return redirect('login')
+MAX_LOGIN_ATTEMPTS = config.get('max_login_attempts', 3)
+BLOCK_DURATION = config.get('block_duration', 5)  # in minutes
 
 
 def login_view(request):
@@ -60,41 +53,3 @@ def login_view(request):
             return render(request, 'login.html', {'error_message': 'Invalid login credentials'})
 
     return render(request, 'login.html')
-
-
-def reset_password(request):
-    return render(request, 'reset_password.html')
-
-
-def forgot_password(request):
-    return render(request, 'forgot_password.html')
-
-
-@login_required(login_url='login')
-def home(request):
-    return render(request, 'home.html')
-
-
-@login_required
-def profile(request):
-    user = request.user
-    context = {
-        'user': user,
-    }
-    return render(request, 'profile.html', context)
-
-
-def signup(request):
-    if request.user.is_authenticated:
-        return redirect('/')
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            user.refresh_from_db()
-            user.save()
-            login(request, user)
-            return redirect('home')
-    else:
-        form = SignupForm()
-    return render(request, 'signup.html', {'form': form})
