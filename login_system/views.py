@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, redirect
 from django.db import connection
 from .models import Account
@@ -15,7 +16,7 @@ def logout(request):
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
 
         user = authenticate(request, username=username, password=password)
@@ -59,7 +60,8 @@ def signup(request):
             now = datetime.now()
             email = request.POST.get('email')
             username = request.POST.get('username')
-            password = request.POST.get('password1')
+
+            password = make_password(request.POST.get('password1'))
             firstname = ''
             last_name = ''
             date_joined = now.strftime("%Y-%m-%d %H:%M:%S")

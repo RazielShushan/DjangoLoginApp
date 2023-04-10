@@ -41,8 +41,7 @@ class Account(AbstractUser):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'username'
     object = MyAccountManager()
 
     def _str_(self):
@@ -53,16 +52,3 @@ class Account(AbstractUser):
 
     def has_module_perms(self, app_label):
         return True
-
-
-"""
-    # Relevant to the non secure version
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.set_password(self.password)
-        super().save(*args, **kwargs)
-
-    def set_password(self, raw_password):
-        self.password = raw_password
-"""
