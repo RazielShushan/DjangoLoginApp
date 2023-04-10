@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
-
+from django.db import connection
+from .models import Account
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as lo
 from .forms.SignupForm import SignupForm
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 
 def logout(request):
@@ -54,13 +56,34 @@ def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            user.refresh_from_db()
-            user.save()
-            # raw_password = form.cleaned_data.get('password1')
-            # user = authenticate(username=user.username, password=raw_password)
-            login(request, user)
-            return redirect('home')
+            now = datetime.now()
+            email = request.POST.get('email')
+            username = request.POST.get('username')
+            password = request.POST.get('password1')
+            firstname = ''
+            last_name = ''
+            date_joined = now.strftime("%Y-%m-%d %H:%M:%S")
+            last_login = now.strftime("%Y-%m-%d %H:%M:%S")
+            is_admin = '0'
+            is_active = '1'
+            is_staff = '0'
+            is_superuser = '0'
+            query = "INSERT INTO login_system_account (first_name,last_name,date_joined,last_login,is_admin,is_active,is_staff,is_superuser, username, email, password) VALUES ('" + \
+                firstname + "','" + last_name + "','" + date_joined + "','" + last_login + "','" + is_admin + "','" + is_active + "','" + is_staff + "','" + is_superuser + "','" + username + "','" + email + \
+                    "','" + password + "');"
+            cursor = connection.cursor()
+
+            try:
+                cursor.execute(query)
+                connection.commit()
+                user = Account.objects.get(email=email)
+
+                login(request, user)
+                return redirect('home')
+            except Exception as e:
+                form.errors['__all__'] = form.error_class(
+                    [str(e) + '\n' + query])
+                return render(request, 'signup.html', {'form': form})
     else:
         form = SignupForm()
     return render(request, 'signup.html', {'form': form})

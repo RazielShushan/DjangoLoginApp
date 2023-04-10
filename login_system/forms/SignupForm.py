@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-# from django.contrib.auth.models import User
 from ..models import Account as User
 from ..validators.password_policy import validate_password
+from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import (
     ValidationError,
 )
