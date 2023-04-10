@@ -1,10 +1,10 @@
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, redirect
 from django.db import connection
-from .models import Account
-from django.contrib.auth import authenticate, login
+from ..models import Account
+from django.contrib.auth import login
 from django.contrib.auth import logout as lo
-from .forms.SignupForm import SignupForm
+from ..forms.SignupForm import SignupForm
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 
@@ -12,21 +12,6 @@ from datetime import datetime
 def logout(request):
     lo(request)
     return redirect('login')
-
-
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('home')
-        else:
-            return render(request, 'login.html', {'error_message': 'Invalid login credentials'})
-
-    return render(request, 'login.html')
 
 
 def reset_password(request):
