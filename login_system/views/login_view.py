@@ -5,6 +5,8 @@ import pytz
 from datetime import datetime, timedelta
 from ..models.LoginAttempt import LoginAttempt
 import yaml
+from django.db import connection
+
 
 # Load the password policy configuration from a YAML file
 with open(r'C:\Users\Raziel personal\django-projects\communication_system\communication_system\login_system\password_policy.yml', 'r') as f:
@@ -20,12 +22,21 @@ def login_view(request):
         password = request.POST.get('password')
         # Check if user with given username exists
         try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return render(request, 'login.html', {'error_message': 'Invalid login credentials'})
+            with connection.cursor() as cursor:
+                query = "SELECT * FROM login_system_account WHERE username='" + \
+                    username + "';"
+                cursor.execute(query)
+                row = cursor.fetchone()
+                rowtemp = row[5]
+                if row:
+                    user = User.objects.get(username=rowtemp)
+                else:
+                    return render(request, 'login.html', {'error_message': 'Invalid login credentials'})
+        except Exception as e:
+            return render(request, 'login.html', {'error_message': str(e) + '\n' + query})
         # Check the user's password and count login attempts
         if not user.is_active:
-            return render(request, 'login.html', {'error_message': 'Your account has been blocked due to too many unsuccessful login attempts. Pleasecontact support for assistance.'})
+            return render(request, 'login.html', {'error_message': 'Your account has been blocked due to too many unsuccessful login attempts. Please contact support for assistance.'})
         if user is not None:
             userauth = authenticate(
                 request, username=username, password=password)
