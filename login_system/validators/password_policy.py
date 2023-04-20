@@ -2,7 +2,7 @@ import yaml
 from .validators_method import *
 
 # Load the password policy configuration from a YAML file
-with open(r'C:\Users\Raziel personal\django-projects\communication_system\communication_system\login_system\password_policy.yml', 'r') as f:
+with open(r'C:\Users\almog\DjangoLoginApp\login_system\password_policy.yml', 'r') as f:
     config = yaml.safe_load(f)
 
 min_length = config.get('min_length', 8)
