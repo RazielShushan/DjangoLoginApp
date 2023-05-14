@@ -1,5 +1,9 @@
 from django.urls import path
-from .views import views, login_view
+from .import views
+from django.views.generic.base import RedirectView
+from django.contrib.auth.views import LogoutView
+from django.contrib.auth import views as auth_views
+
 
 urlpatterns = [
     path('login/', login_view.login_view, name='login'),
@@ -9,4 +13,9 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('', views.home, name='home'),
     path('logout/', views.logout, name='logout'),
+    path('forgot/<token>/', views.password_reset_confim,
+         name='password_reset_confirm'),
+    path('forgot_password_complete/', views.forgot_password_complete,
+         name='password_reset_complete'),
+
 ]

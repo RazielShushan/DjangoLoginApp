@@ -36,6 +36,7 @@ class Account(AbstractUser):
     date_joined = models.DateTimeField(
         verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
+    forget_password_token = models.CharField(max_length=100)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -52,6 +53,11 @@ class Account(AbstractUser):
 
     def has_module_perms(self, app_label):
         return True
+    
+    def set_token(self, token):
+        if token.name == 'sha1':
+            self.forget_password_token = token.hexdigest()
+            return True
 
 
 """
