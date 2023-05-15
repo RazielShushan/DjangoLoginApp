@@ -5,9 +5,10 @@ import pytz
 from datetime import datetime, timedelta
 from ..models.LoginAttempt import LoginAttempt
 import yaml
+from communication_system.settings import PASSWORD_POLICY_FILE_PATH
 
 # Load the password policy configuration from a YAML file
-with open(r'C:\Users\Raziel personal\django-projects\communication_system\communication_system\login_system\password_policy.yml', 'r') as f:
+with open(PASSWORD_POLICY_FILE_PATH, 'r') as f:
     config = yaml.safe_load(f)
 
 MAX_LOGIN_ATTEMPTS = config.get('max_login_attempts', 3)

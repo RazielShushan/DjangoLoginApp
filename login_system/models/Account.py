@@ -36,7 +36,8 @@ class Account(AbstractUser):
     date_joined = models.DateTimeField(
         verbose_name='date joined', auto_now_add=True)
     last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
-    forget_password_token = models.CharField(max_length=100)
+    forget_password_token = models.CharField(
+        max_length=100, null=True, default=None)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -53,21 +54,8 @@ class Account(AbstractUser):
 
     def has_module_perms(self, app_label):
         return True
-    
+
     def set_token(self, token):
         if token.name == 'sha1':
             self.forget_password_token = token.hexdigest()
             return True
-
-
-"""
-    # Relevant to the non secure version
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.set_password(self.password)
-        super().save(*args, **kwargs)
-
-    def set_password(self, raw_password):
-        self.password = raw_password
-"""

@@ -1,5 +1,6 @@
 from django.urls import path
-from .import views
+from .views import login_view
+from .views import views
 from django.views.generic.base import RedirectView
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth import views as auth_views
@@ -17,5 +18,6 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('forgot_password_complete/', views.forgot_password_complete,
          name='password_reset_complete'),
+
 
 ]
