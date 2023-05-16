@@ -1,13 +1,14 @@
 from django.core.exceptions import ValidationError
 import re
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import *
+from ..models.PreviousPassword import PreviousPassword
 
 
 def custom_validate(password, user=None, password_validators=None):
     errors = []
     if password_validators is None:
         password_validators = get_default_password_validators()
-
     for validator in password_validators:
         if validator is not None:
             try:
@@ -66,3 +67,21 @@ class HasSymbolValidator(_ValidatorBase):
     def validate(self, password, user=None):
         if re.search('[^A-Za-z0-9]', password) is None:
             raise ValidationError(self.message, code='missing_symbol')
+
+
+class LastThreePasswordsValidator:
+    _slots__ = ()
+    DEFAULT_MSG = "Your new password cannot be one of the last three passwords you used."
+
+    def validate(self, password, user=None):
+        if user is None:
+            return
+
+        last_three_passwords = PreviousPassword.objects.filter(
+            user=1).order_by('-created_at')[:3]
+        for last_password in last_three_passwords:
+            if check_password(password, last_password.password):
+                raise ValidationError(self.DEFAULT_MSG)
+
+        def get_help_text(self):
+            return self.DEFAULT_MSG

@@ -1,44 +1,99 @@
 {% extends 'base.html' %} {% block content %}
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-header">{{ title }}</div>
-        <div class="card-body">
-          <form method="POST">
-            {% csrf_token %} {% if error_message %}
-            <div class="alert alert-danger" role="alert">
-              {{ error_message }}
-            </div>
-            {% endif %}
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input
-                type="text"
-                class="form-control"
-                id="username"
-                name="username"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                name="password"
-                required
-              />
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-            <a href="{% url 'forgot_password' %}">Forgot Password?</a>
-          </form>
-          <hr />
-          <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Customer Details</title>
+    <style>
+      /* Cool styles go here */
+      body {
+        overflow: hidden;
+        background-color: #121212;
+        color: #ffffff;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 36px;
+        color: #2196f3;
+        margin-top: 50px;
+      }
+
+      form {
+        margin-top: 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      input[type="text"],
+      input[type="tel"],
+      input[type="email"] {
+        padding: 10px;
+        margin: 10px;
+        width: 300px;
+        font-size: 18px;
+        border-radius: 5px;
+        border: none;
+      }
+
+      button[type="submit"] {
+        padding: 10px;
+        margin: 10px;
+        width: 100px;
+        font-size: 18px;
+        border-radius: 5px;
+        border: none;
+        background-color: #2196f3;
+        color: #ffffff;
+        cursor: pointer;
+      }
+
+      hr {
+        margin-top: 50px;
+      }
+
+      h2 {
+        text-align: center;
+        font-size: 24px;
+        color: #2196f3;
+        margin-top: 50px;
+      }
+
+      p {
+        font-size: 18px;
+        margin: 10px;
+      }
+
+      .blink {
+        animation: blinker 1s linear infinite;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Welcome to the Customer Details Page</h1>
+
+    <form method="POST">
+      {% csrf_token %}
+      <input type="text" name="name" placeholder="Name" required />
+      <input type="tel" name="phone" placeholder="Phone" required />
+      <input type="text" name="address" placeholder="Address" required />
+      <button type="submit">Save</button>
+    </form>
+
+    <hr />
+
+    <h2>Latest Customer Details</h2>
+    {% if latest_customer %}
+    <p class="blink">Name: {{ latest_customer.name }}</p>
+    <p class="blink">Phone: {{ latest_customer.phone }}</p>
+    <p class="blink">Address: {{ latest_customer.address }}</p>
+    {% else %}
+    <p>No customer details available.</p>
+    {% endif %}
+  </body>
+</html>
+
 {% endblock %}
