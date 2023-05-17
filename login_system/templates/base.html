@@ -13,7 +13,19 @@
       crossorigin="anonymous"
     />
     <!-- Custom styles -->
-    <link rel="stylesheet" href="{% static styles.css %}" />
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+    <style>
+      /* Custom CSS */
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      .content {
+        flex: 1;
+      }
+    </style>
   </head>
   <body>
     <!-- Navbar -->
@@ -53,7 +65,7 @@
       </div>
     </nav>
     <!-- Content -->
-    <div class="container">{% block content %} {% endblock %}</div>
+    <div class="content container">{% block content %} {% endblock %}</div>
     <!-- Footer -->
     <footer class="bg-light py-3">
       <div class="container text-center">&copy; 2023 Communication System</div>

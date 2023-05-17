@@ -78,7 +78,7 @@ class LastThreePasswordsValidator:
             return
 
         last_three_passwords = PreviousPassword.objects.filter(
-            user=1).order_by('-created_at')[:3]
+            user=user).order_by('-created_at')[:3]
         for last_password in last_three_passwords:
             if check_password(password, last_password.password):
                 raise ValidationError(self.DEFAULT_MSG)

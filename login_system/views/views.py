@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import PasswordResetView as BasePasswordResetView
 from django.core.mail import send_mail
+from django.db import connection
 from django.db.models.query_utils import Q
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -73,7 +74,6 @@ def home(request):
         form = CustomerForm(request.POST)
         if form.is_valid():
             form.save()
-            # redirect to the same page to display the customer details
             return redirect('home')
     else:
         form = CustomerForm()
@@ -103,6 +103,8 @@ def signup(request):
             user = form.save()
             user.refresh_from_db()
             user.save()
+            PreviousPassword.objects.create(
+                user=user, password=user.password)
             login(request, user)
             return redirect('home')
     else:
@@ -182,6 +184,8 @@ def password_reset_confim(request, token):
             user_obj.check_password
             user_obj.forget_password_token = None
             user_obj.save()
+            PreviousPassword.objects.create(
+                user=user_obj, password=user_obj.password)
             return render(request, 'password_reset_complete.html')
 
         return render(request, 'password_reset_confirm.html', context)
