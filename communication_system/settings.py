@@ -98,9 +98,9 @@ WSGI_APPLICATION = 'communication_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Communication_system',
-        'USER': 'root',
-        'PASSWORD': 'til96544',
+        'NAME': '{db_name}',
+        'USER': '{user}',
+        'PASSWORD': '{password}',
         'HOST': 'localhost',
         'PORT': '3306',
     }
