@@ -20,11 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY WARNI NG: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!8)7sh84)no#c_rgd26f=_^7@q$horu%b12gn6@3r##-$3cqs%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 """ 
 # Enable TLS 1.2
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
@@ -105,18 +105,6 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
-""" DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Communication_system',
-        'USER': 'remote',
-        'PASSWORD': '123456',
-        'HOST': 'ec2-3-21-159-201.us-east-2.compute.amazonaws.com',
-        'PORT': '3306',
-    }
-}
-"""
 
 
 # Password validation
