@@ -87,9 +87,15 @@
 
     <h2>Latest Customer Details</h2>
     {% if latest_customer %}
-    <p class="blink">Name: {{ latest_customer.name }}</p>
-    <p class="blink">Phone: {{ latest_customer.phone }}</p>
-    <p class="blink">Address: {{ latest_customer.address }}</p>
+    <p class="blink">
+      Name: {{ latest_customer.name |truncatechars:40|default:''}}
+    </p>
+    <p class="blink">
+      Phone: {{ latest_customer.phone |truncatechars:40|default:''}}
+    </p>
+    <p class="blink">
+      Address: {{ latest_customer.address |truncatechars:40|default:''}}
+    </p>
     {% else %}
     <p>No customer details available.</p>
     {% endif %}
