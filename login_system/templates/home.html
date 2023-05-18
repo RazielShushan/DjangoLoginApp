@@ -1,5 +1,4 @@
 {% extends 'base.html' %} {% block content %}
-
 <html>
   <head>
     <meta charset="utf-8" />
@@ -9,7 +8,6 @@
       body {
         overflow: hidden;
         background-color: #121212;
-        color: #ffffff;
         font-family: Arial, Helvetica, sans-serif;
       }
 
@@ -63,6 +61,7 @@
 
       p {
         font-size: 18px;
+        color: #fff;
         margin: 10px;
       }
 
@@ -87,13 +86,20 @@
 
     <h2>Latest Customer Details</h2>
     {% if latest_customer %}
-    <p class="blink">Name: {{ latest_customer.name }}</p>
-    <p class="blink">Phone: {{ latest_customer.phone }}</p>
-    <p class="blink">Address: {{ latest_customer.address }}</p>
+    <p class="blink">
+      Name: {{ latest_customer.name|truncatechars:40|default:''|safe }}
+    </p>
+    <p class="blink">
+      Phone: {{ latest_customer.phone|truncatechars:40|default:'' }}
+    </p>
+    <p class="blink">
+      Address: {{ latest_customer.address|truncatechars:40|default:'' }}
+    </p>
     {% else %}
     <p>No customer details available.</p>
+    {% endif %} {% if error %}
+    <p style="color: red">Error: {{ error }}</p>
     {% endif %}
   </body>
 </html>
-
 {% endblock %}

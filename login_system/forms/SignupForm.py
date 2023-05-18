@@ -11,6 +11,14 @@ from django.core.exceptions import (
 class SignupForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Email', max_length=255,
                              help_text='Required. Enter a valid email address.')
+    username = forms.CharField(
+        max_length=200,  # Set the desired maximum length for the username field
+        help_text=_(
+            'Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+        error_messages={
+            'unique': _("A user with that username already exists."),
+        },
+    )
 
     class Meta:
         model = User

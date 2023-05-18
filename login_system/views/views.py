@@ -74,14 +74,33 @@ def home(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
         if form.is_valid():
-            form.save()
-            # redirect to the same page to display the customer details
-            return redirect('home')
+            name = request.POST.get('name')
+            phone = request.POST.get('phone')
+            address = request.POST.get('address')
+
+            query = "INSERT INTO login_system_customer (name,phone,address) VALUES ('" + \
+                name + "','" + phone + "','" + address + "');" + \
+                    "SELECT * FROM login_system_customer WHERE id = LAST_INSERT_ID();"
+            try:
+                cursor = connection.cursor()
+                cursor.execute(query)
+                table1 = cursor.fetchall()
+                cursor.nextset()
+                table2 = cursor.fetchall()
+                for item in table2[0]:
+                    print(item)
+                latest_customer = {
+                    'name': table2[0][1],
+                    'phone': table2[0][2],
+                    'address': table2[0][3],
+                }
+            except Exception as e:
+                form.errors['__all__'] = form.error_class(
+                    [str(e) + "query: " + query])
+                return render(request, 'home.html', {'form': form, 'error': str(e) + "\n" + query})
     else:
         form = CustomerForm()
-
-    # get the latest customer details to display on the screen
-    latest_customer = Customer.objects.last()
+        latest_customer = Customer.objects.last()
 
     context = {'form': form, 'latest_customer': latest_customer}
     return render(request, 'home.html', context)
@@ -117,20 +136,25 @@ def signup(request):
             is_superuser = '0'
             query = "INSERT INTO login_system_account (first_name,last_name,date_joined,last_login,is_admin,is_active,is_staff,is_superuser, username, email, password) VALUES ('" + \
                 firstname + "','" + last_name + "','" + date_joined + "','" + last_login + "','" + is_admin + "','" + is_active + "','" + is_staff + "','" + is_superuser + "','" + username + "','" + email + \
-                    "','" + password + "');"
+                    "','" + password + "');"\
+                    "SELECT * FROM login_system_account WHERE id = LAST_INSERT_ID();"
             cursor = connection.cursor()
 
             try:
+                table1 = ""
+                table2 = ""
                 cursor.execute(query)
-                connection.commit()
+                table1 = cursor.fetchall()
+                cursor.nextset()
+                table2 = cursor.fetchall()
                 user = Account.objects.get(email=email)
-
+                PreviousPassword.objects.create(
+                    user=user, password=user.email)
                 login(request, user)
                 return redirect('home')
             except Exception as e:
-                form.errors['__all__'] = form.error_class(
-                    [str(e) + '\n' + query])
-                return render(request, 'signup.html', {'form': form})
+                return render(request, 'signup.html', {'form': form, 'error_message': str(e) + " user:" + str(table2)})
+
     else:
         form = SignupForm()
     return render(request, 'signup.html', {'form': form})
@@ -208,6 +232,8 @@ def password_reset_confim(request, token):
             user_obj.check_password
             user_obj.forget_password_token = None
             user_obj.save()
+            PreviousPassword.objects.create(
+                user=user_obj, password=user_obj.password)
             return render(request, 'password_reset_complete.html')
 
         return render(request, 'password_reset_confirm.html', context)

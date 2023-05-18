@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-!8)7sh84)no#c_rgd26f=_^7@q$horu%b12gn6@3r##-$3cqs%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 """ 
 # Enable TLS 1.2
 ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
@@ -53,9 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
 ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -105,19 +103,6 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
-""" DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Communication_system',
-        'USER': 'remote',
-        'PASSWORD': '123456',
-        'HOST': 'ec2-3-21-159-201.us-east-2.compute.amazonaws.com',
-        'PORT': '3306',
-    }
-}
-"""
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
