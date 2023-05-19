@@ -78,10 +78,20 @@ def home(request):
     else:
         form = CustomerForm()
 
-    # get the latest customer details to display on the screen
+    # Get the latest customer details
     latest_customer = Customer.objects.last()
 
-    context = {'form': form, 'latest_customer': latest_customer}
+    # Perform search if search query is provided
+    search_query = request.GET.get('search_name')
+    if search_query:
+        customers = Customer.objects.filter(
+            Q(name__icontains=search_query)
+        )
+    else:
+        customers = []
+
+    context = {'form': form, 'latest_customer': latest_customer,
+               'customers': customers}
     return render(request, 'home.html', context)
 
 

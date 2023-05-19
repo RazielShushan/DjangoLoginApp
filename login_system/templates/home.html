@@ -5,9 +5,8 @@
     <meta charset="utf-8" />
     <title>Customer Details</title>
     <style>
-      /* Cool styles go here */
       body {
-        overflow: hidden;
+        overflow: auto;
         background-color: #121212;
         font-family: Arial, Helvetica, sans-serif;
       }
@@ -20,7 +19,7 @@
       }
 
       form {
-        margin-top: 50px;
+        margin-top: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -50,7 +49,7 @@
       }
 
       hr {
-        margin-top: 50px;
+        margin-top: 10px;
       }
 
       h2 {
@@ -69,6 +68,37 @@
       .blink {
         animation: blinker 1s linear infinite;
       }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #2196f3;
+        color: #ffffff;
+      }
+
+      .search-form {
+        display: flex;
+        justify-content: center;
+      }
+
+      .search-form input[type="text"] {
+        padding: 5px;
+        margin-right: 10px;
+      }
+
+      .search-results td {
+        color: #ff0000;
+      }
     </style>
   </head>
 
@@ -83,12 +113,10 @@
       <button type="submit">Save</button>
     </form>
 
-    <hr />
-
     <h2>Latest Customer Details</h2>
     {% if latest_customer %}
     <p class="blink">
-      Name: {{ latest_customer.name |truncatechars:40|default:''}}
+      Name: {{ latest_customer.name |truncatechars:40|default:'' }}
     </p>
     <p class="blink">
       Phone: {{ latest_customer.phone |truncatechars:40|default:''}}
@@ -99,7 +127,39 @@
     {% else %}
     <p>No customer details available.</p>
     {% endif %}
+
+    <div class="search-form">
+      <form method="GET">
+        <input
+          type="text"
+          name="search_name"
+          placeholder="Search by name"
+          value="{{ request.GET.search_name }}"
+        />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    {% if customers %}
+    <h2>Search Results</h2>
+    <table class="search-results">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for customer in customers %}
+        <tr>
+          <td>{{ customer.name |truncatechars:40|default:''}}</td>
+          <td>{{ customer.phone |truncatechars:40|default:''}}</td>
+          <td>{{ customer.address |truncatechars:40|default:''}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %} {% endblock %}
   </body>
 </html>
-
-{% endblock %}
