@@ -74,35 +74,28 @@ def home(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
         if form.is_valid():
-            name = request.POST.get('name')
-            phone = request.POST.get('phone')
-            address = request.POST.get('address')
-
-            query = "INSERT INTO login_system_customer (name,phone,address) VALUES ('" + \
-                name + "','" + phone + "','" + address + "');" + \
-                    "SELECT * FROM login_system_customer WHERE id = LAST_INSERT_ID();"
-            try:
-                cursor = connection.cursor()
-                cursor.execute(query)
-                table1 = cursor.fetchall()
-                cursor.nextset()
-                table2 = cursor.fetchall()
-                for item in table2[0]:
-                    print(item)
-                latest_customer = {
-                    'name': table2[0][1],
-                    'phone': table2[0][2],
-                    'address': table2[0][3],
-                }
-            except Exception as e:
-                form.errors['__all__'] = form.error_class(
-                    [str(e) + "query: " + query])
-                return render(request, 'home.html', {'form': form, 'error': str(e) + "\n" + query})
+            form.save()
+            return redirect('home')
     else:
         form = CustomerForm()
-        latest_customer = Customer.objects.last()
 
-    context = {'form': form, 'latest_customer': latest_customer}
+    # Get the latest customer details
+    latest_customer = Customer.objects.last()
+    search_query = request.GET.get('search_name')
+    if search_query:
+        query = "SELECT * FROM login_system_customer WHERE name LIKE '" + search_query + "%';"
+        try:
+            cursor = connection.cursor()
+            cursor.execute(query)
+            customers = cursor.fetchall()
+
+        except Exception as e:
+            messages.error(request, str(e)+"Query: " + query)
+            customers = []
+    else:
+        customers = []
+    context = {'form': form, 'latest_customer': latest_customer,
+               'customers': customers}
     return render(request, 'home.html', context)
 
 

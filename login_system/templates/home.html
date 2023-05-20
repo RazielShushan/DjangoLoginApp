@@ -1,12 +1,12 @@
 {% extends 'base.html' %} {% block content %}
+
 <html>
   <head>
     <meta charset="utf-8" />
     <title>Customer Details</title>
     <style>
-      /* Cool styles go here */
       body {
-        overflow: hidden;
+        overflow: auto;
         background-color: #121212;
         font-family: Arial, Helvetica, sans-serif;
       }
@@ -19,7 +19,7 @@
       }
 
       form {
-        margin-top: 50px;
+        margin-top: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -49,7 +49,7 @@
       }
 
       hr {
-        margin-top: 50px;
+        margin-top: 10px;
       }
 
       h2 {
@@ -68,6 +68,41 @@
       .blink {
         animation: blinker 1s linear infinite;
       }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #2196f3;
+        color: #ffffff;
+      }
+
+      .search-form {
+        display: flex;
+        justify-content: center;
+      }
+
+      .search-form input[type="text"] {
+        padding: 5px;
+        margin-right: 10px;
+      }
+
+      .search-results td {
+        color: #ff0000;
+      }
+      .error-message {
+        color: red;
+        margin: 10px;
+      }
     </style>
   </head>
 
@@ -81,25 +116,58 @@
       <input type="text" name="address" placeholder="Address" required />
       <button type="submit">Save</button>
     </form>
-
-    <hr />
-
+    {% if messages %}
+    <div class="error-message">
+      {% for message in messages %} {{ message }} {% endfor %}
+    </div>
+    {% endif %}
     <h2>Latest Customer Details</h2>
     {% if latest_customer %}
     <p class="blink">
-      Name: {{ latest_customer.name|truncatechars:40|default:''|safe }}
+      Name: {{ latest_customer.name |truncatechars:40|default:'' | safe}}
     </p>
     <p class="blink">
-      Phone: {{ latest_customer.phone|truncatechars:40|default:'' }}
+      Phone: {{ latest_customer.phone |truncatechars:40|default:''}}
     </p>
     <p class="blink">
-      Address: {{ latest_customer.address|truncatechars:40|default:'' }}
+      Address: {{ latest_customer.address |truncatechars:40|default:''}}
     </p>
     {% else %}
     <p>No customer details available.</p>
-    {% endif %} {% if error %}
-    <p style="color: red">Error: {{ error }}</p>
     {% endif %}
+
+    <div class="search-form">
+      <form method="GET">
+        <input
+          type="text"
+          name="search_name"
+          placeholder="Search by name"
+          value="{{ request.GET.search_name }}"
+        />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    {% if customers %}
+    <h2>Search Results</h2>
+    <table class="search-results">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for customer in customers %}
+        <tr>
+          <td>{{ customer.1 |truncatechars:40|default:''| safe}}</td>
+          <td>{{ customer.2 |truncatechars:40|default:''}}</td>
+          <td>{{ customer.3 |truncatechars:40|default:''}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %} {% endblock %}
   </body>
 </html>
-{% endblock %}
